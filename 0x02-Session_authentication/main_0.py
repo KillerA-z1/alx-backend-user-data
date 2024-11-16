@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """ Main 0
 """
-import sys
-import os
+import base64
+from api.v1.auth.basic_auth import BasicAuth
+from models.user import User
 
-# Add the project root directory to sys.path
-current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(current_dir))
-sys.path.append(project_root)
+""" Create a user test """
+user_email = "bob@hbtn.io"
+user_clear_pwd = "H0lbertonSchool98!"
 
-from api.v1.auth.auth import Auth
+user = User()
+user.email = user_email
+user.password = user_clear_pwd
+print("New user: {}".format(user.id))
+user.save()
 
-a = Auth()
-
-print(a.require_auth("/api/v1/status/", ["/api/v1/status/"]))
-print(a.authorization_header())
-print(a.current_user())
+basic_clear = "{}:{}".format(user_email, user_clear_pwd)
+print("Basic Base64: {}".format(base64.b64encode(basic_clear.encode('utf-8')).decode("utf-8")))
