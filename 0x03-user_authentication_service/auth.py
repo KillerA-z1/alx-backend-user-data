@@ -2,6 +2,7 @@
 """Authentication module for the API."""
 
 import bcrypt
+import uuid
 from sqlalchemy.orm.exc import NoResultFound
 from db import DB
 from user import User
@@ -19,6 +20,15 @@ def _hash_password(password: str) -> bytes:
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed
+
+
+def _generate_uuid() -> str:
+    """Generate a new UUID and return its string representation.
+
+    Returns:
+        str: The string representation of the UUID.
+    """
+    return str(uuid.uuid4())
 
 
 class Auth:
