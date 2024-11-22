@@ -44,7 +44,7 @@ def login():
 
 @app.route("/sessions", methods=["DELETE"])
 def logout():
-    """Log out a user and destroy their session."""
+    """Log out a user and destroy their session"""
     session_id = request.cookies.get("session_id")
 
     if session_id is None:
@@ -75,6 +75,21 @@ def profile():
         abort(403)
 
     return jsonify({"email": user.email})
+
+
+@app.route("/reset_password", methods=["POST"])
+def get_reset_password_token():
+    """Generate a reset password token for a user"""
+    email = request.form.get("email")
+
+    if email is None or email == '':
+        abort(400)
+
+    try:
+        reset_token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": email, "reset_token": reset_token}), 200
+    except ValueError:
+        abort(403)
 
 
 if __name__ == "__main__":
